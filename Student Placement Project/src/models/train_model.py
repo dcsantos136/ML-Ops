@@ -33,38 +33,49 @@ def train():
     # Start MLflow experiment
     mlflow.set_experiment("Student Placement Prediction")
 
-    with mlflow.start_run():
-        n_estimators = 100
-        random_state = 42
+    # Define three configurations to evaluate
+    configs = [
+        {"name": "rf_default", "n_estimators": 100, "max_depth": None, "random_state": 42},
+        {"name": "rf_deeper", "n_estimators": 200, "max_depth": 10, "random_state": 42},
+        {"name": "rf_small", "n_estimators": 50, "max_depth": 5, "random_state": 42},
+    ]
 
-        # Train model
-        model = RandomForestClassifier(
-            n_estimators=n_estimators,
-            random_state=random_state
-        )
-        model.fit(X_train, y_train)
+    # Prepare models directory
+    models_dir = project_root / "models"
+    models_dir.mkdir(parents=True, exist_ok=True)
 
-        # Model evaluation
-        y_pred = model.predict(X_test)
-        accuracy = accuracy_score(y_test, y_pred)
+    # Train and log each configuration as its own MLflow run
+    for cfg in configs:
+        with mlflow.start_run(run_name=cfg["name"]):
+            model = RandomForestClassifier(
+                n_estimators=cfg["n_estimators"],
+                max_depth=cfg["max_depth"],
+                random_state=cfg["random_state"],
+            )
+            model.fit(X_train, y_train)
 
-        # Log parameters in MLflow
-        mlflow.log_param("model_type", "RandomForestClassifier")
-        mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("random_state", random_state)
+            # Model evaluation
+            y_pred = model.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
 
-        # Log metrics in MLflow
-        mlflow.log_metric("accuracy", accuracy)
+            # Log parameters and metrics
+            mlflow.log_param("model_type", "RandomForestClassifier")
+            mlflow.log_params({k: v for k, v in cfg.items() if k != "name"})
+            mlflow.log_metric("accuracy", accuracy)
 
-        # Save model locally
-        models_dir = project_root / "models"
-        models_dir.mkdir(parents=True, exist_ok=True)
-        joblib.dump(model, models_dir / "model.pkl")
+            # Save model locally with config name
+            local_model_path = models_dir / f"model_{cfg['name']}.pkl"
+            joblib.dump(model, local_model_path)
 
-        # Log model artifact in MLflow
-        mlflow.sklearn.log_model(model, "model")
+            # Log model artifact in MLflow
+            # Allow skops to trust sklearn tree internals for RandomForest
+            mlflow.sklearn.log_model(
+                model,
+                "model",
+                skops_trusted_types=["sklearn.tree._tree.Tree"],
+            )
 
-        print(f"Model trained on student placement dataset! Accuracy: {accuracy}")
+            print(f"Run '{cfg['name']}' finished. Accuracy: {accuracy}")
 
 
 if __name__ == "__main__":
