@@ -1,0 +1,9 @@
+stages:
+  train:
+    cmd: python src/models/train_model.py
+    deps:
+    - data/raw/student_placement_data.csv
+    - src/models/train_model.py
+    outs:
+    - mlruns
+    - models
