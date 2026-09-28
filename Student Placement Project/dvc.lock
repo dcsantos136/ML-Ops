@@ -1,0 +1,24 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: .venv\\Scripts\\python.exe src/models/train_model.py
+    deps:
+    - path: data/raw/student_placement_data.csv
+      hash: md5
+      md5: 596344ff5c39d8316e97c73663d3f80d
+      size: 1659
+    - path: src/models/train_model.py
+      hash: md5
+      md5: ae4e868f94e608455687c87f83e63b9c
+      size: 2892
+    outs:
+    - path: mlruns
+      hash: md5
+      md5: 8220f5a00c1f8f7313ed861e04bfb9f1.dir
+      size: 6476163
+      nfiles: 15
+    - path: models
+      hash: md5
+      md5: fc67fbcb1b20322999f18e8741342a90.dir
+      size: 674203
+      nfiles: 3
