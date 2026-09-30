@@ -15,11 +15,14 @@ jobs:
   ci:
     name: Validate Airflow project
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "Student Placement Project"
     env:
       AIRFLOW_HOME: ${{ runner.temp }}/airflow
-      AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/dags
+      AIRFLOW__CORE__DAGS_FOLDER: "${{ github.workspace }}/Student Placement Project/dags"
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-      PYTHONPATH: ${{ github.workspace }}
+      PYTHONPATH: "${{ github.workspace }}/Student Placement Project"
 
     steps:
       - name: Check out project
@@ -30,6 +33,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: Student Placement Project/requirements-airflow.txt
 
       - name: Install Airflow and DAG dependencies
         run: >-
@@ -93,8 +97,8 @@ jobs:
       - name: Build and publish image
         uses: docker/build-push-action@v7
         with:
-          context: .
-          file: Dockerfile
+          context: "./Student Placement Project"
+          file: "./Student Placement Project/Dockerfile"
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
