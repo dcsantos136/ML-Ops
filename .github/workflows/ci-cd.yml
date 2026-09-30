@@ -19,7 +19,7 @@ jobs:
       run:
         working-directory: "Student Placement Project"
     env:
-      AIRFLOW_HOME: ${{ runner.temp }}/airflow
+      AIRFLOW_HOME: ${{ github.workspace }}/.airflow
       AIRFLOW__CORE__DAGS_FOLDER: "${{ github.workspace }}/Student Placement Project/dags"
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       PYTHONPATH: "${{ github.workspace }}/Student Placement Project"
