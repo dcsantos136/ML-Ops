@@ -1,5 +1,17 @@
 # Student Placement Project
 
+## Airflow on Windows with WSL2
+
+Airflow must run in a Linux environment. This project uses Airflow 2.11.2 with Python 3.12 in WSL2.
+
+After opening the project folder in Ubuntu WSL, start the local Airflow services with:
+
+```bash
+bash start_airflow_wsl.sh
+```
+
+The Airflow UI is available at <http://localhost:8080>. The standalone command prints the generated login details; its password is also stored in `~/.local/share/student-placement-airflow/standalone_admin_password.txt` inside WSL. Keep the terminal running while using Airflow.
+
 This repository contains an end-to-end machine learning project for predicting student placement outcomes. It includes data preprocessing, feature engineering, model training, evaluation, and a minimal API and frontend for serving predictions.
 
 ## Project Structure

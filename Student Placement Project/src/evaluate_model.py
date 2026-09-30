@@ -14,15 +14,22 @@ def evaluate() -> dict:
 
     project_root = Path(__file__).resolve().parents[1]
     data_path = project_root / "data" / "raw" / "student_placement_data.csv"
-    model_path = project_root / "models" / "model.pkl"
+    model_dir = project_root / "models"
+    candidate_paths = [
+        model_dir / "model.pkl",
+        model_dir / "model_rf_default.pkl",
+        model_dir / "model_rf_deeper.pkl",
+        model_dir / "model_rf_small.pkl",
+    ]
+    model_path = next((path for path in candidate_paths if path.exists()), None)
 
     if not data_path.exists():
         raise FileNotFoundError(
             f"Dataset not found at {data_path}. Run preprocessing first."
         )
-    if not model_path.exists():
+    if model_path is None:
         raise FileNotFoundError(
-            f"Model not found at {model_path}. Run training first."
+            "No trained model found in models/. Run training first."
         )
 
     frame = pd.read_csv(data_path)
@@ -39,11 +46,16 @@ def evaluate() -> dict:
     model = joblib.load(model_path)
     y_pred = model.predict(x_test)
 
+    y_test_binary = (y_test == "Yes").astype(int)
+    y_pred_binary = (y_pred == "Yes").astype(int)
+
     metrics = {
-        "accuracy": float(accuracy_score(y_test, y_pred)),
-        "precision": float(precision_score(y_test, y_pred, zero_division=0)),
-        "recall": float(recall_score(y_test, y_pred, zero_division=0)),
-        "f1": float(f1_score(y_test, y_pred, zero_division=0)),
+        "accuracy": float(accuracy_score(y_test_binary, y_pred_binary)),
+        "precision": float(
+            precision_score(y_test_binary, y_pred_binary, zero_division=0)
+        ),
+        "recall": float(recall_score(y_test_binary, y_pred_binary, zero_division=0)),
+        "f1": float(f1_score(y_test_binary, y_pred_binary, zero_division=0)),
     }
 
     reports_dir = project_root / "reports"

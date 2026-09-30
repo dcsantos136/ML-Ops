@@ -1,0 +1,25 @@
+artifact_path: file:C:/Users/dcs13/Desktop/Courses/MLOps  - Edureka/Student Placement
+  Project/mlruns/1/models/m-cccb993e5f9047fe8464e0ba801f3ad7/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.13.15
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.1
+    skops_trusted_types:
+    - sklearn.tree._tree.Tree
+mlflow_version: 3.16.1
+model_id: m-cccb993e5f9047fe8464e0ba801f3ad7
+model_size_bytes: 3682843
+model_uuid: m-cccb993e5f9047fe8464e0ba801f3ad7
+prompts: null
+run_id: e4352c8879ce4e91994f22e86cafc927
+utc_time_created: '2026-09-28 13:34:41.723508'

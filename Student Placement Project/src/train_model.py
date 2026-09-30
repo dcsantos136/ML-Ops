@@ -8,3 +8,6 @@ def train() -> None:
     from src.models.train_model import train as _train
 
     _train()
+
+if __name__ == "__main__":
+    train()

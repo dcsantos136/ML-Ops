@@ -1,4 +1,6 @@
 [core]
-    remote = localremote
+    remote = gcs_remote
 ['remote "localremote"']
     url = ../dvc-storage
+['remote "gcs_remote"']
+    url = gs://student-placement-project-dvc
