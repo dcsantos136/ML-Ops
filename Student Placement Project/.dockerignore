@@ -1,0 +1,7 @@
+**
+!Dockerfile
+!requirements-airflow.txt
+!dags
+!dags/**
+!src
+!src/**

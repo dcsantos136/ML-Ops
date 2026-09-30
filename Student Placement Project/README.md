@@ -12,6 +12,12 @@ bash start_airflow_wsl.sh
 
 The Airflow UI is available at <http://localhost:8080>. The standalone command prints the generated login details; its password is also stored in `~/.local/share/student-placement-airflow/standalone_admin_password.txt` inside WSL. Keep the terminal running while using Airflow.
 
+## CI/CD
+
+GitHub Actions validates the Airflow DAG on pushes and pull requests to `main` or `master`. After CI passes on a push or version tag, it builds the Airflow image and publishes it to GitHub Container Registry (`ghcr.io/<owner>/<repository>`). Pull requests validate the project but do not publish an image.
+
+The published image contains the DAG and Python source. Supply the project dataset to the runtime environment at `data/raw/student_placement_data.csv` before triggering the pipeline.
+
 This repository contains an end-to-end machine learning project for predicting student placement outcomes. It includes data preprocessing, feature engineering, model training, evaluation, and a minimal API and frontend for serving predictions.
 
 ## Project Structure
