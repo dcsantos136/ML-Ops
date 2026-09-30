@@ -51,8 +51,8 @@ jobs:
 
       - name: Confirm project DAG is registered
         run: |
-          airflow dags list --output json > dags.json
-          python -c "import json; dags=json.load(open('dags.json')); assert any(dag['dag_id'] == 'ml_pipeline' for dag in dags), 'ml_pipeline was not discovered'"
+          airflow dags list --output table | tee dags-list.txt
+          grep -q 'ml_pipeline' dags-list.txt
 
       - name: Check Python syntax
         run: python -m compileall -q dags src
